@@ -1,0 +1,17 @@
+{
+  "sdpVersion": "0.1",
+  "id": "org.example.hello-data",
+  "name": "Hello SDP",
+  "version": "0.1.0",
+  "kind": "document",
+  "purpose": "Demonstrar um pacote SDP sem código executável",
+  "creator": {
+    "id": "example.author",
+    "name": "Example Author"
+  },
+  "description": "Texto de demonstração autodeclarado; não é uma certificação.",
+  "profiles": [],
+  "metadata": {
+    "language": "pt-BR"
+  }
+}
