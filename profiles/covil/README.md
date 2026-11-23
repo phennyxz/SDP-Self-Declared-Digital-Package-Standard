@@ -1,5 +1,8 @@
 # Perfil SDP-COVIL — interoperabilidade com hosts de jogos
 
+**Integração VLG:** o formato de jogo **VLG** permanece no repositório [covil-game-spec](https://github.com/phennyxz/covil-game-spec). VLG é a especialização ZIP do SDP para jogos: usa o núcleo genérico de manifesto/inventário/assinatura e acrescenta `manifest.json` de jogo e o perfil `org.covil.runtime`. O VLG legado 0.1 continua distinto e não é SDP-compatible por simples renomeação. A variante experimental está em [PR #3](https://github.com/phennyxz/covil-game-spec/pull/3), ainda sem merge nem verificação de assinatura.
+
+
 **Estado:** perfil de integração experimental. O protocolo COVIL é **independente do SDP**: um jogo COVIL pode chegar por outras vias e um SDP pode conter dados sem código executável.
 
 O SDP declara um objeto `profiles[]` com `id:"org.covil.runtime"`, `version:"0.1"` e `config` específico, por exemplo:
