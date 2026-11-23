@@ -9,6 +9,7 @@ const strictJSON = raw => {
   return JSON.parse(utf8.decode(raw));
 };
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const crc32 = bytes => { let c=0xffffffff; for (const b of bytes) { c ^= b; for (let n=0;n<8;n++) c=(c>>>1)^((c&1)?0xedb88320:0); } return (c^0xffffffff)>>>0; };
 const ascii = b => Buffer.from(b, 'ascii');
 const secureName = s => typeof s === 'string' && !!s && !s.includes('\\') && !s.includes('\\0') &&
   !s.startsWith('/') && !s.includes(':') && !s.split('/').some(x => !x || x === '.' || x === '..');
@@ -16,6 +17,7 @@ const exact = (obj, required, allowed = required) => obj && typeof obj === 'obje
   required.every(k => Object.hasOwn(obj, k)) && Object.keys(obj).every(k => allowed.includes(k));
 function entries(zip) {
   const out = new Map();
+  const spans = [];
   // Locate end-of-central-directory (EOCD) within max comment length.
   let end = -1;
   for (let i = zip.length - 22; i >= Math.max(0, zip.length - 65557); i--) {
@@ -36,7 +38,7 @@ function entries(zip) {
     if (p + 46 + nameLen + extra + comment > end) fail('Invalid entry length');
     const name = utf8.decode(zip.subarray(p + 46, p + 46 + nameLen));
     if (!secureName(name) || out.has(name) || name.endsWith('/')) fail('Unsafe or duplicate path');
-    if (flags & 1 || flags & 0x40 || !(flags & 0x800) || ![0,8].includes(method)) fail('Unsupported ZIP flags, encryption or method');
+    if ((flags & ~0x808) !== 0 || !(flags & 0x800) || ![0,8].includes(method)) fail('Unsupported ZIP flags, encryption or method');
     const unixMode = external >>> 16;
     if ((unixMode & 0xf000) && (unixMode & 0xf000) !== 0x8000) fail('ZIP special file unsupported');
     if (usize > 64 * 1024 * 1024 || usize > budget || csize > 64 * 1024 * 1024) fail('Entry size limit');
@@ -48,11 +50,14 @@ function entries(zip) {
     if (!zip.subarray(local + 30, local + 30 + lname).equals(zip.subarray(p + 46, p + 46 + nameLen))) fail('Local name mismatch');
     const dataStart = local + 30 + lname + lextra;
     if (dataStart + csize > offset) fail('Entry overlaps ZIP index');
+    for (const [start, finish] of spans) if (local < finish && dataStart + csize > start) fail('Overlapping ZIP entries');
+    spans.push([local, dataStart + csize]);
     const packed = zip.subarray(dataStart, dataStart + csize);
     let bytes;
     if (method === 0) bytes = packed;
     else bytes = inflateRawSync(packed, { maxOutputLength: usize + 1 });
     if (bytes.length !== usize) fail('ZIP decompressed size mismatch');
+    if (crc32(bytes) !== expectedCrc) fail('ZIP CRC mismatch');
     out.set(name, bytes);
     p += 46 + nameLen + extra + comment;
   }
