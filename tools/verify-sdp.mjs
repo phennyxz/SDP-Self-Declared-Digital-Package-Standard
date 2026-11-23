@@ -11,7 +11,7 @@ const strictJSON = raw => {
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const crc32 = bytes => { let c=0xffffffff; for (const b of bytes) { c ^= b; for (let n=0;n<8;n++) c=(c>>>1)^((c&1)?0xedb88320:0); } return (c^0xffffffff)>>>0; };
 const ascii = b => Buffer.from(b, 'ascii');
-const secureName = s => typeof s === 'string' && !!s && !s.includes('\\') && !s.includes('\\0') &&
+const secureName = s => typeof s === 'string' && !!s && !s.includes('\\') && !s.includes('\0') &&
   !s.startsWith('/') && !s.includes(':') && !s.split('/').some(x => !x || x === '.' || x === '..');
 const exact = (obj, required, allowed = required) => obj && typeof obj === 'object' && !Array.isArray(obj) &&
   required.every(k => Object.hasOwn(obj, k)) && Object.keys(obj).every(k => allowed.includes(k));
