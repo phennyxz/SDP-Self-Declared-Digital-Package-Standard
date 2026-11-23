@@ -1,0 +1,4 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; import { readFileSync } from 'node:fs'; import { execFileSync } from 'node:child_process';import { verifySDP } from '../tools/verify-sdp.mjs';
+test('valid minimal non-executable SDP package',()=>{execFileSync(process.execPath,['tools/build-example.mjs']);const r=verifySDP(readFileSync('examples/minimal.sdp'));assert.equal(r.structure,'valid');assert.equal(r.kind,'document');assert.equal(r.signature,'absent')});
+test('corrupted ZIP is rejected',()=>{const b=readFileSync('examples/minimal.sdp');assert.throws(()=>verifySDP(b.subarray(0,b.length-7)))});
+test('corrupted inventory or payload is rejected',()=>{const b=Buffer.from(readFileSync('examples/minimal.sdp'));const needle=Buffer.from('Este arquivo');const at=b.indexOf(needle);assert.ok(at>=0);b[at]=0x41;assert.throws(()=>verifySDP(b))});

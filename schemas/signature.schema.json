@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SDP 0.1 Ed25519 signature envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "sdpVersion",
+    "algorithm",
+    "keyId",
+    "signature"
+  ],
+  "properties": {
+    "sdpVersion": {
+      "const": "0.1"
+    },
+    "algorithm": {
+      "const": "Ed25519"
+    },
+    "keyId": {
+      "type": "string",
+      "pattern": "^ed25519-sha256:[0-9a-f]{64}$"
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{86}$"
+    }
+  }
+}

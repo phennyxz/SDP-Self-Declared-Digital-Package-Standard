@@ -1,0 +1,15 @@
+{
+  "name": "sdp-self-declared-digital-package-standard",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Experimental SDP Core 0.1 reference tooling",
+  "scripts": {
+    "test": "node --test",
+    "example": "node tools/build-example.mjs",
+    "verify:example": "node tools/verify-sdp.mjs examples/minimal.sdp"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

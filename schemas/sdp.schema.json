@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SDP Core 0.1 experimental manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "sdpVersion",
+    "id",
+    "name",
+    "version",
+    "kind",
+    "purpose",
+    "creator"
+  ],
+  "properties": {
+    "sdpVersion": {
+      "const": "0.1"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 160,
+      "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "kind": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "maxLength": 64
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 4000
+    },
+    "creator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "keyId": {
+          "type": "string",
+          "pattern": "^ed25519-sha256:[a-f0-9]{64}$"
+        }
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "version",
+          "config"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)+$",
+            "maxLength": 160
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$"
+          },
+          "config": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "requirements": {
+      "type": "object"
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "license": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri",
+      "maxLength": 2000
+    }
+  }
+}

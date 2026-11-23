@@ -1,13 +1,5 @@
-# ADR 0001 — SDP como formato universal de autodeclaração
+# ADR 0001 — Núcleo universal
 
-**Status: aceita como diretriz do draft 0.1 (2026-11-23).**
+**Estado:** decisão de projeto, 2026-11-23.
 
-## Decisão
-
-SDP significa **Self-Declared Digital Package Standard**. Um pacote não precisa ser jogo, software ou executável. O núcleo transporta autodeclarações do criador, arquivos, inventário criptográfico e assinatura opcional. O recebedor verifica o que considerar necessário e decide sobre admissão e confiança.
-
-A sigla SDP já possui outros usos; `.sdp` é apenas uma extensão proposta, não registro exclusivo.
-
-## Consequências
-
-O protocolo COVIL vira perfil opcional. O VLG histórico não é magicamente compatível com SDP; migrar exige reconstrução do inventário e nova assinatura. Nenhuma CA ou ferramenta de conformidade é autoridade obrigatória do formato.
+SDP é um pacote digital autodeclarado para qualquer conteúdo, inclusive não executável. A integridade do formato é verificável e a verdade das afirmações compete ao recebedor. COVIL é um perfil de interoperabilidade opcional.
